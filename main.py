@@ -19,7 +19,9 @@ def main():
     ip = s.getsockname()[0]
     hostname = s.getsockname()
 
-    s.close()
+    
+    socket.getaddrinfo('192.168.178.4', 80)
+    #s.close()
     print("Own IP: " + ip + "\n")
 
     #add hosts to hosts list
@@ -39,7 +41,6 @@ def main():
 
     # print(hosts)
     ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count)
-
     print("Responders: " + str(responders) + "\n")
 
 
