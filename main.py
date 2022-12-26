@@ -28,12 +28,12 @@ def main():
     split = ip.split('.')
     
     if not ScanClassB:
-        for j in range(1, 256):
+        for j in range(1, 255):
             new_ip = split[0] + '.' + split[1] + '.' + split[2] + '.' + str(j)
             hosts.append(new_ip)
     else:
         for i in range(1, 256):
-            for j in range(1, 256):
+            for j in range(1, 255):
                 new_ip = split[0] + '.' + split[1] + '.' + str(i) + '.' + str(j)
                 hosts.append(new_ip)
 
