@@ -20,7 +20,7 @@ def main():
     hostname = s.getsockname()
 
     
-    socket.getaddrinfo('192.168.178.4', 80)
+    print(socket.getaddrinfo('192.168.178.4', 80))
     #s.close()
     print("Own IP: " + ip + "\n")
 
