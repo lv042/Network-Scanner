@@ -7,7 +7,7 @@ This script is a simple network scanner that pings all the hosts within a specif
 - pythonping library
 
 ## Usage
-1. Clone the repository: git clone https://github.com/[USERNAME]/network-scanner.git
+1. Clone the repository: git clone https://github.com/lv042/network-scanner.git
 2. Install the required library: pip install pythonping
 3. Run the script: python main.py
 
