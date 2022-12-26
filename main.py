@@ -1,6 +1,7 @@
 import socket
 from pythonping import ping
 import time
+import concurrent.futures
 
 
 def main():
@@ -26,8 +27,9 @@ def main():
             hosts.append(new_ip)
 
     # print(hosts)
-    for host in hosts:
-        ping_host(host)
+    ping_hosts_in_parallel(hosts)
+
+    print("Responders: " + str(responders) + "\n")
 
 
 
@@ -35,7 +37,7 @@ def main():
 
 
 def ping_host(host):
-    ping_result = ping(target=host, count=10, timeout=1)
+    ping_result = ping(target=host, count=10, timeout=0.5)
     print("Pinging: " + host + "\n")
     print(ping_result)
    
@@ -47,15 +49,21 @@ def ping_host(host):
     else:
         print("Host is down: " + host + "\n")
 
+
+def ping_hosts_in_parallel(hosts):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        # Start the ping processes (in this case, using a thread pool)
+        results = [executor.submit(ping_host, host) for host in hosts]
+
+        for future in concurrent.futures.as_completed(results):
+            result = future.result()    
+
+
 hosts = [
     '127.0.0.1'
 ]
 
 responders = []
-
-# for host in hosts:
-#     print(ping_host(host))
-
 
 if __name__ == '__main__':
     main()
