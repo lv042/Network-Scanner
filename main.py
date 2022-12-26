@@ -11,6 +11,8 @@ num_threads = 100
 
 
 def main():
+    start_time = time.time()
+
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     
@@ -20,7 +22,7 @@ def main():
     hostname = s.getsockname()
 
     
-    print(socket.getaddrinfo('192.168.178.4', 80))
+  
     #s.close()
     print("Own IP: " + ip + "\n")
 
@@ -42,6 +44,21 @@ def main():
     # print(hosts)
     ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count)
     print("Responders: " + str(responders) + "\n")
+
+    #Resolve hostnames
+    for host in responders:
+        try:
+            print("Resolving hostname for: " + host + "\n")
+            hostname = socket.gethostbyaddr(host)
+            print("Hostname: " + str(hostname) + "\n")
+        except Exception as e:
+            print("Error: " + str(e) + "\n")
+    
+    #print the time it took to scan the network
+    print("Time elapsed: " + str(time.time() - start_time) + " seconds\n")
+
+    #close the socket
+    s.close()
 
 
 
