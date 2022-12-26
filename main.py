@@ -48,18 +48,22 @@ def main():
 
 
 def ping_host(host, timeout, packet_loss_threshold, count):
-    #ping the host with the specified timeout and packet loss threshold
-    ping_result = ping(target=host, count=count, timeout=timeout)
-    print("Pinging: " + host + "\n")
-    #print all attributes of the ping result
-    print(ping_result.__dict__)
+    try:
+        #ping the host with the specified timeout and packet loss threshold
+        ping_result = ping(target=host, count=count, timeout=timeout)
+        print("Pinging: " + host + "\n")
+        #print all attributes of the ping result
+        print(ping_result.__dict__)
 
-    #add host to responders list if packet loss is below the specified threshold
-    if ping_result.packet_loss < packet_loss_threshold:
-        print("Host is up: " + host + "\n")
-        responders.append(host)
-    else:
-        print("Host is down: " + host + "\n")
+        #add host to responders list if packet loss is below the specified threshold
+        if ping_result.packet_loss < packet_loss_threshold:
+            print("Host is up: " + host + "\n")
+            responders.append(host)
+        else:
+            print("Host is down: " + host + "\n")
+    except Exception as e:
+        print("Error: " + str(e) + "\n")
+
 
     
 
