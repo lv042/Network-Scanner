@@ -3,6 +3,11 @@ from pythonping import ping
 import time
 import concurrent.futures
 
+#ping a list of hosts in parallel with a timeout of 0.25 seconds, a packet loss threshold of 10%, and a count of 20
+timeout = 0.25
+packet_loss_threshold = 10
+count = 20
+
 
 def main():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -27,7 +32,7 @@ def main():
             hosts.append(new_ip)
 
     # print(hosts)
-    ping_hosts_in_parallel(hosts)
+    ping_hosts_in_parallel(hosts, 0.25)
 
     print("Responders: " + str(responders) + "\n")
 
@@ -36,28 +41,26 @@ def main():
 
 
 
-def ping_host(host):
-    ping_result = ping(target=host, count=10, timeout=0.5)
+def ping_host(host, timeout, packet_loss_threshold, count):
+    #ping the host with the specified timeout and packet loss threshold
+    ping_result = ping(target=host, count=count, timeout=timeout)
     print("Pinging: " + host + "\n")
     print(ping_result)
-   
 
-    if ping_result.packet_loss == 0:
+    #add host to responders list if packet loss is below the specified threshold
+    if ping_result.packet_loss <= packet_loss_threshold:
         print("Host is up: " + host + "\n")
-        #add host to responders list
         responders.append(host)
     else:
         print("Host is down: " + host + "\n")
 
-
-def ping_hosts_in_parallel(hosts):
+def ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Start the ping processes (in this case, using a thread pool)
-        results = [executor.submit(ping_host, host) for host in hosts]
+        results = [executor.submit(ping_host, host, timeout, packet_loss_threshold, count) for host in hosts]
 
         for future in concurrent.futures.as_completed(results):
-            result = future.result()    
-
+            result = future.result()
 
 hosts = [
     '127.0.0.1'
