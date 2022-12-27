@@ -2,13 +2,17 @@ import socket
 from pythonping import ping
 import time
 import concurrent.futures
+import typer
+
+#versioning
+version = 0.1
 
 #Change these as you like
-ScanClassB = False
-timeout = 0.25
-packet_loss_threshold = 1
-count = 3
-num_threads = 100
+_ScanClassB = False
+_timeout = 0.25
+_packet_loss_threshold = 1
+_count = 3
+_num_threads = 100
 
 
 ########## DO NOT CHANGE ANYTHING BELOW THIS LINE ##########
@@ -110,9 +114,41 @@ def resolved_hosts():
 hosts = [
     '127.0.0.1'
 ]
-
 responders = []
 
-if __name__ == '__main__':
+
+
+
+
+###CLI###
+app = typer.Typer()
+
+#test command 
+@app.command()
+def typer_main(classb: str = typer.Option("False", help="Scan Class B network"), timeout: float = typer.Option(0.25, help="Timeout for ping"), packet_loss_threshold: int = typer.Option(1, help="Packet loss threshold"), count: int = typer.Option(3, help="Number of packets to send"), num_threads: int = typer.Option(100, help="Number of threads to use")):
+    global ScanClassB
+    global timeout
+    global packet_loss_threshold
+    global count
+    global num_threads
+
+    if classbc == "True":
+        ScanClassB = True
+    else:
+        ScanClassB = False
+    timeout = timeout
+    packet_loss_threshold = packet_loss_thresholdc
+    count = countc
+    num_threads = num_threadsc
+    
     main()
+
+
+
+if __name__ == '__main__':
+    #main()
+    app()
+
+
+
 
