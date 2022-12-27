@@ -43,8 +43,7 @@ def main():
     split = ip.split('.')
     
     print(_scan_class_b)
-    return
-    if not _scan_class_b:
+    if _scan_class_b is False:
         for j in range(1, 255):
             new_ip = split[0] + '.' + split[1] + '.' + split[2] + '.' + str(j)
             hosts.append(new_ip)
@@ -137,7 +136,7 @@ app = typer.Typer()
 
 #test command 
 @app.command()
-def typer_main(classb: str = typer.Option("False", help="Scan Class B network"), timeout: float = typer.Option(0.25, help="Timeout for ping"), packet_loss_threshold: int = typer.Option(1, help="Packet loss threshold"), count: int = typer.Option(3, help="Number of packets to send"), num_threads: int = typer.Option(100, help="Number of threads to use")):
+def typer_main(classb: bool = typer.Option("False", help="Scan Class B network"), timeout: float = typer.Option(0.25, help="Timeout for ping"), packet_loss_threshold: int = typer.Option(1, help="Packet loss threshold"), count: int = typer.Option(3, help="Number of packets to send"), num_threads: int = typer.Option(100, help="Number of threads to use")):
     global _scan_class_b
     global _timeout
     global _packet_loss_threshold
