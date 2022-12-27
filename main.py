@@ -122,6 +122,10 @@ responders = []
 
 
 def print_settings():
+    #print version
+    print("Version: " + str(version) + "\n")
+
+    #print settings
     print("\nSettings: \n")
     print("Scan Class B: " + str(_scan_class_b))
     print("Timeout: " + str(_timeout))
@@ -168,6 +172,7 @@ def typer_main(classb: bool = typer.Option("False", help="Scan Class B network")
     _count = count
     _num_threads = num_threads
 
+    
     check_sudo()
     print_settings()
     main()
