@@ -113,6 +113,8 @@ def resolved_hosts():
     #print the time it took to scan the network
     print("Time elapsed: " + str(time.time() - start_time) + " seconds\n")
 
+
+
 hosts = [
     '127.0.0.1'
 ]
@@ -129,6 +131,21 @@ def print_settings():
 
     #wait for user input
     input("Press enter to start or ctrl+c to exit...")
+
+def check_sudo():
+    #check if user is root
+    try:
+        if getpass.getuser() != "root":
+            print("Please run as root...")
+            exit()
+        else:
+            print("Running as root")
+    except Exception as e:
+        print("Error: " + str(e))
+        print("Please run as root... Root detection only works on unix systems")
+        input("Press enter to continue anyway or ctrl+c to exit...")
+
+    
     
 
 
@@ -150,6 +167,8 @@ def typer_main(classb: bool = typer.Option("False", help="Scan Class B network")
     _packet_loss_threshold = packet_loss_threshold
     _count = count
     _num_threads = num_threads
+
+    check_sudo()
     print_settings()
     main()
 
