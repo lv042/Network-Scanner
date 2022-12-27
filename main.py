@@ -42,6 +42,8 @@ def main():
 
     split = ip.split('.')
     
+    print(_scan_class_b)
+    return
     if not _scan_class_b:
         for j in range(1, 255):
             new_ip = split[0] + '.' + split[1] + '.' + split[2] + '.' + str(j)
