@@ -3,6 +3,7 @@ from pythonping import ping
 import time
 import concurrent.futures
 import typer
+import getpass 
 
 #versioning
 version = 0.1
