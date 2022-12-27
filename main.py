@@ -3,6 +3,7 @@ from pythonping import ping
 import time
 import concurrent.futures
 
+#Change these as you like
 ScanClassB = False
 timeout = 0.25
 packet_loss_threshold = 1
@@ -10,8 +11,17 @@ count = 3
 num_threads = 100
 
 
+########## DO NOT CHANGE ANYTHING BELOW THIS LINE ##########
+start_time = time.time()
+
+#Colouring
+def colored(r, g, b, text):
+    return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
+
+
+
 def main():
-    start_time = time.time()
+    
 
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -20,10 +30,7 @@ def main():
 
     ip = s.getsockname()[0]
     hostname = s.getsockname()
-
-    
   
-    #s.close()
     print("Own IP: " + ip + "\n")
 
     #add hosts to hosts list
@@ -43,19 +50,8 @@ def main():
 
     # print(hosts)
     ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count)
-    print("Responders: " + str(responders) + "\n")
-
-    #Resolve hostnames
-    for host in responders:
-        try:
-            print("Resolving hostname for: " + host + "\n")
-            hostname = socket.gethostbyaddr(host)
-            print("Hostname: " + str(hostname) + "\n")
-        except Exception as e:
-            print("Error: " + str(e) + "\n")
     
-    #print the time it took to scan the network
-    print("Time elapsed: " + str(time.time() - start_time) + " seconds\n")
+    resolved_hosts()
 
     #close the socket
     s.close()
@@ -69,19 +65,22 @@ def ping_host(host, timeout, packet_loss_threshold, count):
     try:
         #ping the host with the specified timeout and packet loss threshold
         ping_result = ping(target=host, count=count, timeout=timeout)
-        print("Pinging: " + host + "\n")
+
+       
+
         #print all attributes of the ping result
+        print("Pinging: " + host + "\n")
         print(ping_result.__dict__)
+        
 
         #add host to responders list if packet loss is below the specified threshold
         if ping_result.packet_loss < packet_loss_threshold:
-            print("Host is up: " + host + "\n")
+            print(colored(0, 255, 0, "Host is up: " + host + "\n"))
             responders.append(host)
         else:
-            print("Host is down: " + host + "\n")
+          print(colored(255, 0, 0, "Host is down: " + host + "\n"))
     except Exception as e:
-        print("Error: " + str(e) + "\n")
-
+            print(colored(255, 0, 0, "Error: " + str(e) + "\n"))
 
     
 
@@ -91,7 +90,22 @@ def ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count):
         results = [executor.submit(ping_host, host, timeout, packet_loss_threshold, count) for host in hosts]
 
         for future in concurrent.futures.as_completed(results):
+            # Wait for the ping process to complete and get the result
             result = future.result()
+
+def resolved_hosts():
+    print("Responders: " + str(responders) + "\n")
+
+    #Resolve hostnames
+    for host in responders:
+        try:
+            hostname = socket.gethostbyaddr(host)
+            print(colored(0, 255, 0, "Resolving hostname: " + str(hostname) + "\n"))
+        except Exception as e:
+            print(colored(255, 0, 0, "Error: " + str(e) + "\n"))
+    
+    #print the time it took to scan the network
+    print("Time elapsed: " + str(time.time() - start_time) + " seconds\n")
 
 hosts = [
     '127.0.0.1'
