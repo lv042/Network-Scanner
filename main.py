@@ -8,7 +8,7 @@ import typer
 version = 0.1
 
 #Change these as you like
-_ScanClassB = False
+_scan_class_b = False
 _timeout = 0.25
 _packet_loss_threshold = 1
 _count = 3
@@ -42,7 +42,7 @@ def main():
 
     split = ip.split('.')
     
-    if not ScanClassB:
+    if not _scan_class_b:
         for j in range(1, 255):
             new_ip = split[0] + '.' + split[1] + '.' + split[2] + '.' + str(j)
             hosts.append(new_ip)
@@ -53,7 +53,7 @@ def main():
                 hosts.append(new_ip)
 
     # print(hosts)
-    ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count)
+    ping_hosts_in_parallel(hosts, _timeout, _packet_loss_threshold, _count)
     
     resolved_hosts()
 
@@ -89,7 +89,7 @@ def ping_host(host, timeout, packet_loss_threshold, count):
     
 
 def ping_hosts_in_parallel(hosts, timeout, packet_loss_threshold, count):
-      with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+      with concurrent.futures.ThreadPoolExecutor(max_workers=_num_threads) as executor:
         # Start the ping processes (in this case, using a thread pool)
         results = [executor.submit(ping_host, host, timeout, packet_loss_threshold, count) for host in hosts]
 
@@ -117,7 +117,17 @@ hosts = [
 responders = []
 
 
+def print_settings():
+    print("\nSettings: \n")
+    print("Scan Class B: " + str(_scan_class_b))
+    print("Timeout: " + str(_timeout))
+    print("Packet loss threshold: " + str(_packet_loss_threshold))
+    print("Count: " + str(_count))
+    print("Number of threads: " + str(_num_threads) + "\n")
 
+    #wait for user input
+    input("Press enter to start or ctrl+c to exit...")
+    
 
 
 ###CLI###
@@ -126,21 +136,19 @@ app = typer.Typer()
 #test command 
 @app.command()
 def typer_main(classb: str = typer.Option("False", help="Scan Class B network"), timeout: float = typer.Option(0.25, help="Timeout for ping"), packet_loss_threshold: int = typer.Option(1, help="Packet loss threshold"), count: int = typer.Option(3, help="Number of packets to send"), num_threads: int = typer.Option(100, help="Number of threads to use")):
-    global ScanClassB
-    global timeout
-    global packet_loss_threshold
-    global count
-    global num_threads
+    global _scan_class_b
+    global _timeout
+    global _packet_loss_threshold
+    global _count
+    global _num_threads
 
-    if classbc == "True":
-        ScanClassB = True
-    else:
-        ScanClassB = False
-    timeout = timeout
-    packet_loss_threshold = packet_loss_thresholdc
-    count = countc
-    num_threads = num_threadsc
     
+    _scan_class_b = classb
+    _timeout = timeout
+    _packet_loss_threshold = packet_loss_threshold
+    _count = count
+    _num_threads = num_threads
+    print_settings()
     main()
 
 
