@@ -123,10 +123,10 @@ responders = []
 
 def print_settings():
     #print version
-    print("Version: " + str(version) + "\n")
+    print("\nRunning version: " + str(version) + "\n")
 
     #print settings
-    print("\nSettings: \n")
+    print("Settings: \n")
     print("Scan Class B: " + str(_scan_class_b))
     print("Timeout: " + str(_timeout))
     print("Packet loss threshold: " + str(_packet_loss_threshold))
@@ -140,14 +140,12 @@ def check_sudo():
     #check if user is root
     try:
         if getpass.getuser() != "root":
-            print("Please run as root...")
+            print(colored(255, 0, 0, "Please run as root..."))
             exit()
-        else:
-            print("Running as root")
     except Exception as e:
-        print("Error: " + str(e))
-        print("Please run as root... Root detection only works on unix systems")
-        input("Press enter to continue anyway or ctrl+c to exit...")
+        print(colored(255, 0, 0, "Error: " + str(e) + "\n"))
+        print(colored(255, 0, 0, "Please run as root... Root detection only works on unix systems"))
+        input(colored(255, 0, 0, "Press enter to continue anyway or ctrl+c to exit..."))
 
     
     
